@@ -21,5 +21,15 @@ post '/set_player_name' do
 end
 
 get '/game' do
-  "Hello" + session[:player_name].to_s
+  cards = %W[A 2 3 4 5 6 7 8 9 10 J Q K]
+  suits = %w[H S C D]
+  session[:deck] = cards.product(suits).shuffle!
+
+  session[:dealer_cards] = []
+  session[:player_cards] = []
+
+  2.times {session[:dealer_cards] << session[:deck].shift}
+  2.times {session[:player_cards] << session[:deck].shift}
+
+  erb :game
 end
