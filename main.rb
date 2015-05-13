@@ -67,10 +67,24 @@ helpers do
     end
   end
 
+  def compare_cards
+    player_total = calculate_total(session[:player_cards])
+    dealer_total = calculate_total(session[:dealer_cards])
+
+    if player_total > dealer_total
+      @success = "#{session[:player_name]}'s cards are better! #{session[:player_name]} wins!!"
+    elsif player_total < dealer_total
+      @error = "Dealer's cards are better. #{session[:player_name]} loses."
+    elsif player_total == dealer_total
+      @neutral = "#{session[:player_name]}'s and the Dealer's cards are the same. It's a tie."
+    end
+  end
+      
 end
 
 before do
   @show_hit_stay_buttons = true
+  @show_dealer_next_card_button = false
 end
 
 get '/' do
@@ -127,13 +141,39 @@ post '/game/player/hit' do
 end
 
 post '/game/player/stay' do
-  @success = "#{session[:player_name]} chooses to stay"
   @show_hit_stay_buttons = false
+  redirect '/game/dealer'
+end
+
+get '/game/dealer' do
+  @show_hit_stay_buttons = false
+
+  total = calculate_total(session[:dealer_cards])
+  
+  if total > 21
+    busted('dealer')
+  elsif total == 21
+    blackjack('dealer')
+  elsif total < 17
+    @show_dealer_next_card_button = true
+  else
+    redirect '/game/compare_cards'
+  end
+
   erb :game
 end
 
+post '/game/dealer/hit' do
+  session[:dealer_cards] << session[:deck].shift
+  redirect '/game/dealer'
+  erb :game
+end
 
-
+get '/game/compare_cards' do
+  @show_hit_stay_buttons = false
+  compare_cards
+  erb :game
+end 
 
 
 

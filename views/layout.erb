@@ -12,6 +12,7 @@
         <div class="container">
             <ul class="nav">
               <li><a href="/get_username">Start Over</a></li>
+              <li><a href="/game">New hand</a></li>
             </ul>
         </div>
       </div>
@@ -23,6 +24,9 @@
     <% end %>
     <%if @success %>
       <div class="alert alert-success"><%=@success%></div>
+    <% end %>
+    <%if @neutral %>
+      <div class="alert alert-warning"><%=@neutral%></div>
     <% end %>
       <%= yield %>
   </div>

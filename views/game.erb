@@ -4,7 +4,14 @@
 		<% session[:dealer_cards].each do |card| %>
 		  <%= display_card(card) %>
 		<% end %>
-	<h5>Dealer's total: <%= calculate_total(session[:dealer_cards]) %></h5>
+	<h5>Dealer has a total of <%= calculate_total(session[:dealer_cards]) %></h5>
+
+	<% if @show_dealer_next_card_button %>
+		<p> Dealer will hit </p>
+		<form id='show_dealer_next_card' action="/game/dealer/hit" method="post">
+			<input type="submit" value="Show Dealer's next card" class="btn btn-success">
+		</form>
+	<% end %>
 </div>
 <div class='well'>
 	<h3><%= session[:player_name] %>'s cards:</h3>
@@ -13,8 +20,8 @@
 		<% end %>
 	<h5><%= session[:player_name]%>'s total: <%= calculate_total(session[:player_cards]) %></h5>
 </div>
-<h3>What will <%= session[:player_name] %> do?</h3>
 <% if @show_hit_stay_buttons %>
+	<h3>What will <%= session[:player_name] %> do?</h3>
 	<form id='hit_button' action="/game/player/hit" method="post">
 		<input type="submit" value="Hit" class="btn btn-success">
 	</form>
