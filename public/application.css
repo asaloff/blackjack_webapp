@@ -1,0 +1,16 @@
+
+form#hit_button {
+	float: left;
+	margin-right: 10px;
+}
+
+form#stay_button {
+	float: left;
+	margin-right: 10px;
+}
+
+img.card_resize {
+	width: 100px;
+	height: auto;
+	margin: 0 5px 5px 0;
+}
