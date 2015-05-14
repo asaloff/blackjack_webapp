@@ -1,10 +1,16 @@
 <h1>Welcome to Blackjack <%= session[:player_name] %>!</h1>
-<div class='well'>
+
+<div class="well">
 	<h3>Dealer's cards:</h3>
-		<% session[:dealer_cards].each do |card| %>
-		  <%= display_card(card) %>
+		<% if @player_turn %>
+			<img class='card_resize' src='/images/cards/cover.jpg'>
+			<%= display_card(session[:dealer_cards][1]) %>
+		<% else %>
+			<% session[:dealer_cards].each do |card| %>
+			  <%= display_card(card) %>
+			<% end %>
+			<h5>Dealer has a total of <%= calculate_total(session[:dealer_cards]) %></h5>
 		<% end %>
-	<h5>Dealer has a total of <%= calculate_total(session[:dealer_cards]) %></h5>
 
 	<% if @show_dealer_next_card_button %>
 		<p> Dealer will hit </p>
@@ -13,7 +19,8 @@
 		</form>
 	<% end %>
 </div>
-<div class='well'>
+
+<div class="well">
 	<h3><%= session[:player_name] %>'s cards:</h3>
 		<% session[:player_cards].each do |card| %>
 		  <%= display_card(card) %>

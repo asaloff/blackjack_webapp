@@ -1,3 +1,7 @@
+body {
+	background-image: url("/images/Felt-Green.jpg"); 
+}
+
 
 form#hit_button {
 	float: left;
@@ -14,3 +18,4 @@ img.card_resize {
 	height: auto;
 	margin: 0 5px 5px 0;
 }
+

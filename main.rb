@@ -1,7 +1,11 @@
 require 'rubygems'
 require 'sinatra'
+require 'pry'
 
 set :sessions, true
+
+BLACKJACK_AMOUNT = 21
+DEALER_MIN_HIT = 17
 
 helpers do
   
@@ -21,7 +25,7 @@ helpers do
 
     if arr.any? { |card| card.include?("A") }
       arr.each do |card|
-        total -= 10 if total > 21 && card.include?("A")
+        total -= 10 if total > BLACKJACK_AMOUNT && card.include?("A")
       end
     end
     total
@@ -50,24 +54,27 @@ helpers do
   def blackjack(player)
     if player == 'dealer'
       @error = "Dealer has Blackjack...Bummer."
-      @show_hit_stay_buttons = false
     else
       @success = "#{session[:player_name]} has Blackjack!!"
-      @show_hit_stay_buttons = false
     end
+    @show_hit_stay_buttons = false
+    @play_again = true
   end
 
   def busted(player)
     if player == 'dealer'
       @success= "Dealer busts!! #{session[:player_name]} wins!!"
-      @show_hit_stay_buttons = false
     else
       @error = "#{session[:player_name]} busts! Maybe next time."
-      @show_hit_stay_buttons = false
     end
+    @show_hit_stay_buttons = false
+    @play_again = true
   end
 
   def compare_cards
+  @show_hit_stay_buttons = false
+  @player_turn = false
+
     player_total = calculate_total(session[:player_cards])
     dealer_total = calculate_total(session[:dealer_cards])
 
@@ -78,13 +85,20 @@ helpers do
     elsif player_total == dealer_total
       @neutral = "#{session[:player_name]}'s and the Dealer's cards are the same. It's a tie."
     end
+    @play_again = true
   end
-      
+
+  def display_play_again_buttons
+    "<p class='play-again'><strong>Would you like to play again?</strong> 
+    <a class='btn btn-primary' href='/game'>Yes</a> <a class='btn' href='/end_game'>No</a></p>"
+  end
+
 end
 
 before do
   @show_hit_stay_buttons = true
   @show_dealer_next_card_button = false
+  @player_turn = true
 end
 
 get '/' do
@@ -120,10 +134,8 @@ get '/game' do
   2.times {session[:dealer_cards] << session[:deck].shift}
   2.times {session[:player_cards] << session[:deck].shift}
 
-  if calculate_total(session[:player_cards]) == 21
+  if calculate_total(session[:player_cards]) == BLACKJACK_AMOUNT
     blackjack('player')
-  elsif calculate_total(session[:dealer_cards]) == 21
-    blackjack('dealer')
   end
 
   erb :game
@@ -132,9 +144,9 @@ end
 post '/game/player/hit' do
   session[:player_cards] << session[:deck].shift
   total = calculate_total(session[:player_cards])
-  if total > 21
+  if total > BLACKJACK_AMOUNT
     busted('player')
-  elsif total == 21
+  elsif total == BLACKJACK_AMOUNT
     blackjack('player')
   end
   erb :game
@@ -147,14 +159,15 @@ end
 
 get '/game/dealer' do
   @show_hit_stay_buttons = false
+  @player_turn = false
 
   total = calculate_total(session[:dealer_cards])
   
-  if total > 21
+  if total > BLACKJACK_AMOUNT
     busted('dealer')
-  elsif total == 21
+  elsif total == BLACKJACK_AMOUNT
     blackjack('dealer')
-  elsif total < 17
+  elsif total < DEALER_MIN_HIT
     @show_dealer_next_card_button = true
   else
     redirect '/game/compare_cards'
@@ -170,11 +183,13 @@ post '/game/dealer/hit' do
 end
 
 get '/game/compare_cards' do
-  @show_hit_stay_buttons = false
   compare_cards
   erb :game
 end 
 
+get '/end_game' do
+  erb :end_game
+end
 
 
 

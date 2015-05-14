@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>My First App</title>
+    <title>My First Web App</title>
     <link rel="stylesheet" href="/vendor/bootstrap/css/bootstrap.min.css">
     <link rel="stylesheet" href="/application.css">
   </head>
@@ -20,13 +20,19 @@
 
   <div class="container">
     <%if @error %>
-      <div class="alert alert-error"><%=@error%></div>
+      <div class="alert alert-error"><%=@error%>
+        <%= display_play_again_buttons %>
+      </div>
     <% end %>
     <%if @success %>
-      <div class="alert alert-success"><%=@success%></div>
+      <div class="alert alert-success"><%=@success%>
+        <%= display_play_again_buttons %>
+      </div>
     <% end %>
     <%if @neutral %>
-      <div class="alert alert-warning"><%=@neutral%></div>
+      <div class="alert alert-warning"><%=@neutral%>
+        <%= display_play_again_buttons %>
+      </div>
     <% end %>
       <%= yield %>
   </div>
