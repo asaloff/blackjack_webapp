@@ -24,6 +24,16 @@ form#stay_button {
 	margin-right: 10px;
 }
 
+form#yes_button {
+	float: left;
+	margin-right: 10px;
+}
+
+form#no_button {
+	float: left;
+	margin-right: 10px;
+}
+
 img.card_resize {
 	width: 100px;
 	height: auto;

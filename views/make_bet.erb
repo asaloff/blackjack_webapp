@@ -1,0 +1,8 @@
+
+<%= "<h2>You currently have #{session[:player_wallet].to_s} dollars</h2>" %>
+<h4>How much would you like to bet?</h4>
+<form action="/set_bet_amount" method="post">
+	<input type="text" name="bet">
+	<br>
+	<input type="submit" class="btn btn-primary">
+</form>
