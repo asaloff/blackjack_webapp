@@ -58,7 +58,7 @@ helpers do
       @success = "#{session[:player_name]} has Blackjack!!"
     end
     @show_hit_stay_buttons = false
-    @play_again = true
+    @replay = true
   end
 
   def busted(player)
@@ -68,12 +68,12 @@ helpers do
       @error = "#{session[:player_name]} busts! Maybe next time."
     end
     @show_hit_stay_buttons = false
-    @play_again = true
+    @replay = true
   end
 
   def compare_cards
-  @show_hit_stay_buttons = false
-  @player_turn = false
+    @show_hit_stay_buttons = false
+    @player_turn = false
 
     player_total = calculate_total(session[:player_cards])
     dealer_total = calculate_total(session[:dealer_cards])
@@ -85,7 +85,7 @@ helpers do
     elsif player_total == dealer_total
       @neutral = "#{session[:player_name]}'s and the Dealer's cards are the same. It's a tie."
     end
-    @play_again = true
+    @replay = true
   end
 
   def display_play_again_buttons
@@ -114,6 +114,7 @@ get '/get_username' do
 end
 
 post '/set_player_name' do
+
   if params['player_name'].empty?
     @error = 'Required feild is empty.'
     halt erb :player_name_form

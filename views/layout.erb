@@ -23,20 +23,22 @@
   <div class="container">
     <%if @error %>
       <div class="alert alert-error"><%=@error%>
-        <%= display_play_again_buttons %>
       </div>
     <% end %>
     <%if @success %>
       <div class="alert alert-success"><%=@success%>
-        <%= display_play_again_buttons %>
       </div>
     <% end %>
     <%if @neutral %>
       <div class="alert alert-warning"><%=@neutral%>
-        <%= display_play_again_buttons %>
       </div>
     <% end %>
-      <%= yield %>
+    <div class="button">
+      <%if @replay %>
+        <%= display_play_again_buttons %>
+      <% end %>
+    </div>
+    <%= yield %>
   </div>
   </body>
 </html>
