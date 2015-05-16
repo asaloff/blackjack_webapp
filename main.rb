@@ -2,7 +2,9 @@ require 'rubygems'
 require 'sinatra'
 require 'pry'
 
-set :sessions, true
+use Rack::Session::Cookie, :key => 'rack.session',
+                           :path => '/',
+                           :secret => 'random_string' 
 
 BLACKJACK_AMOUNT = 21
 DEALER_MIN_HIT = 17
@@ -63,7 +65,7 @@ helpers do
       pay_up
     end
     @show_hit_stay_buttons = false
-    @replay = true
+    @display_play_again_buttons = true
   end
 
   def busted(player)
@@ -74,7 +76,7 @@ helpers do
       @error = "#{session[:player_name]} busts! Maybe next time."
     end
     @show_hit_stay_buttons = false
-    @replay = true
+    @display_play_again_buttons = true
   end
 
   def compare_cards
@@ -93,19 +95,7 @@ helpers do
       @neutral = "#{session[:player_name]}'s and the Dealer's cards are the same. It's a tie."
       session[:player_wallet] += session[:pot]
     end
-    @replay = true
-  end
-
-  def display_play_again_buttons  
-    "<h3>Would you like to play again?</h3>
-      <div class='seg'>
-        <form id='yes_button' action='/game/play_again' method='post'>
-          <input type='submit' value='Yes' class='btn btn-success'>
-        </form>
-        <form id='no_button' action='/game/leave' method='post'>
-          <input type='submit' value='No' class='btn btn-danger'>
-        </form>
-      </div>"
+    @display_play_again_buttons = true
   end
 
 end
@@ -114,6 +104,7 @@ before do
   @show_hit_stay_buttons = true
   @show_dealer_next_card_button = false
   @player_turn = true
+  @display_play_again_buttons = false
 end
 
 get '/' do
