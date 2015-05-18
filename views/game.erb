@@ -4,7 +4,7 @@
 	<div class='seg'>
 		<h3>Dealer's cards:</h3>
 		<% if @player_turn %>
-			<img class='card_resize' src='/images/cards/cover.jpg'>
+    		<img class='card_resize' src='/images/cards/cover.jpg'>
 			<%= display_card(session[:dealer_cards][1]) %>
 		<% else %>
 			<% session[:dealer_cards].each do |card| %>

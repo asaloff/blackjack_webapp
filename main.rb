@@ -108,7 +108,6 @@ before do
 end
 
 get '/' do
-
   if session[:player_name]
     redirect "/make_bet"
   else
@@ -157,7 +156,7 @@ post '/set_bet_amount' do
   elsif params[:bet].to_i > session[:player_wallet]
     @error = "You can't bet what you don't have!"
     halt erb :make_bet
-  elsif params[:bet].empty?
+  elsif params[:bet].empty? || params[:bet].to_i < 1
     @error = "You can't begin without a bet"
     halt erb :make_bet
   end
