@@ -22,6 +22,15 @@
     </div>
 
   <div class="container">
+    <%if @error %>
+      <div class="alert alert-error"><%=@error%></div>
+    <% end %>
+    <%if @success %>
+      <div class="alert alert-success"><%=@success%></div>
+    <% end %>
+    <%if @neutral %>
+      <div class="alert alert-warning"><%=@neutral%></div>
+    <% end %>
     <%= yield %>
   </div>
   </body>
