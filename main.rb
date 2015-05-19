@@ -12,6 +12,7 @@ DEALER_MIN_HIT = 17
 helpers do
   
   def calculate_total(cards) 
+
     arr = cards.map { |e| e[1] }
 
     total = 0
@@ -34,6 +35,7 @@ helpers do
   end
 
   def display_card(card)
+
     suit = case card[0]
       when 'D' then 'diamonds'
       when 'C' then 'clubs'
@@ -53,11 +55,18 @@ helpers do
     "<img class='card_resize' src='/images/cards/#{suit}_#{value}.jpg'>"
   end
 
+  def deal_card_to(whom)
+    session[:dealer_cards] << session[:deck].shift if whom == 'dealer'
+    session[:player_cards] << session[:deck].shift if whom == 'player'
+  end
+
   def pay_up
+
     2.times { session[:player_wallet] += session[:pot] }
   end
 
   def blackjack(player)
+
     if player == 'dealer'
       @error = "Dealer has Blackjack...Bummer."
     else
@@ -69,6 +78,7 @@ helpers do
   end
 
   def busted(player)
+
     if player == 'dealer'
       @success= "Dealer busts!! #{session[:player_name]} wins!!"
       pay_up
@@ -80,6 +90,7 @@ helpers do
   end
 
   def compare_cards
+
     @show_hit_stay_buttons = false
     @player_turn = false
 
@@ -101,6 +112,7 @@ helpers do
 end
 
 before do
+  
   @show_hit_stay_buttons = true
   @show_dealer_next_card_button = false
   @player_turn = true
@@ -108,6 +120,7 @@ before do
 end
 
 get '/' do
+
   if session[:player_name]
     redirect "/make_bet"
   else
@@ -145,6 +158,7 @@ get '/make_bet' do
 end
 
 get '/out_of_money' do
+
   erb :out_of_money
 end
 
@@ -174,8 +188,8 @@ get '/game' do
   session[:dealer_cards] = []
   session[:player_cards] = []
 
-  2.times {session[:dealer_cards] << session[:deck].shift}
-  2.times {session[:player_cards] << session[:deck].shift}
+  2.times { deal_card_to 'dealer' }
+  2.times { deal_card_to 'player' }
 
   if calculate_total(session[:player_cards]) == BLACKJACK_AMOUNT
     blackjack('player')
@@ -186,7 +200,7 @@ end
 
 post '/game/player/hit' do
 
-  session[:player_cards] << session[:deck].shift
+  deal_card_to 'player'
   total = calculate_total(session[:player_cards])
   if total > BLACKJACK_AMOUNT
     busted('player')
@@ -225,7 +239,7 @@ end
 
 post '/game/dealer/hit' do
 
-  session[:dealer_cards] << session[:deck].shift
+  deal_card_to 'dealer'
   redirect '/game/dealer'
 end
 
@@ -236,10 +250,12 @@ get '/game/compare_cards' do
 end 
 
 post '/game/play_again' do
+
   redirect '/make_bet'
 end
 
 post '/game/leave' do
+
   redirect 'end_game'
 end
 
