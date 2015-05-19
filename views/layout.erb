@@ -22,31 +22,6 @@
     </div>
 
   <div class="container">
-    <%if @error %>
-      <div class="alert alert-error"><%=@error%>
-      </div>
-    <% end %>
-    <%if @success %>
-      <div class="alert alert-success"><%=@success%>
-      </div>
-    <% end %>
-    <%if @neutral %>
-      <div class="alert alert-warning"><%=@neutral%>
-      </div>
-    <% end %>
-    <div class="button">
-      <%if @display_play_again_buttons %>
-        <h3>Would you like to play again?</h3>
-          <div class='seg'>
-            <form id='yes_button' action='/game/play_again' method='post'>
-               <input type='submit' value='Yes' class='btn btn-success'>
-            </form>
-            <form id='no_button' action='/game/leave' method='post'>
-              <input type='submit' value='No' class='btn btn-danger'>
-           </form>
-        </div>
-      <% end %>
-    </div>
     <%= yield %>
   </div>
   </body>

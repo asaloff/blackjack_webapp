@@ -193,7 +193,8 @@ post '/game/player/hit' do
   elsif total == BLACKJACK_AMOUNT
     blackjack('player')
   end
-  erb :game
+
+  erb :game, layout: false
 end
 
 post '/game/player/stay' do
@@ -219,20 +220,19 @@ get '/game/dealer' do
     redirect '/game/compare_cards'
   end
 
-  erb :game
+  erb :game, layout: false
 end
 
 post '/game/dealer/hit' do
 
   session[:dealer_cards] << session[:deck].shift
   redirect '/game/dealer'
-  erb :game
 end
 
 get '/game/compare_cards' do
 
   compare_cards
-  erb :game
+  erb :game, layout: false
 end 
 
 post '/game/play_again' do
